@@ -66,10 +66,10 @@ public class CacheTest {
         User userById1 = mapper2.findUserById(1);
         System.out.println(userById == userById1);
 
-        User user = new User();
-        user.setId(1);
-        user.setUsername("jack");
-        mapper3.updateUser(user);
+//        User user = new User();
+//        user.setId(1);
+//        user.setUsername("jack");
+//        mapper3.updateUser(user);
         User userById2 = mapper2.findUserById(1);
         System.out.println(userById2);
     }
