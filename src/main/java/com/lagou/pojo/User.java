@@ -1,9 +1,10 @@
 package com.lagou.pojo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class User implements Serializable {
 
     private Integer id;
     private String username;

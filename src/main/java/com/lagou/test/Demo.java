@@ -55,13 +55,14 @@ public class Demo {
     }
 
     private UserMapper userMapper;
-
+    private OrderMapper orderMapper;
     @Before
     public void init() throws IOException {
         InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
         SqlSessionFactory build = new SqlSessionFactoryBuilder().build(resourceAsStream);
         SqlSession sqlSession = build.openSession(true);
         userMapper = sqlSession.getMapper(UserMapper.class);
+        orderMapper = sqlSession.getMapper(OrderMapper.class);
     }
 
     @Test
@@ -90,6 +91,30 @@ public class Demo {
         List<User> user = userMapper.findUser();
         for (User user1 : user) {
             System.out.println(user1);
+        }
+    }
+
+    @Test
+    public void oneToone(){
+        List<Orders> userAndOrder = orderMapper.findUserAndOrder();
+        for (Orders orders : userAndOrder) {
+            System.out.println(orders);
+        }
+    }
+
+    @Test
+    public void oneTomany(){
+        List<User> allUser = userMapper.findAllUser();
+        for (User user : allUser) {
+            System.out.println(user);
+        }
+    }
+
+    @Test
+    public void manyToMany(){
+        List<User> allUserAndRole = userMapper.findAllUserAndRole();
+        for (User user : allUserAndRole) {
+            System.out.println(user);
         }
     }
 }

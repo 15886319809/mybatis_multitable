@@ -46,6 +46,7 @@ public class Orders {
                 "id=" + id +
                 ", total=" + total +
                 ", orderTime='" + orderTime + '\'' +
+                ", user=" + user +
                 '}';
     }
 }
