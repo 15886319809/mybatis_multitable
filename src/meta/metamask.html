@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#bu1").click(function () {
+                metaMaskAuthorization();
+            })
+
+            $("#bu2").click(function () {
+                trand();
+            })
+
+            $("#bu3").click(function () {
+                sign();
+            })
+
+            async function metaMaskAuthorization() {
+                try {
+                    const accounts = await ethereum.enable();
+                    console.log(accounts); // 账户地址列表
+                } catch (e) {
+                    console.log('请授权'); // 处理未授权状态提示。
+                }
+            }
+
+            function trand() {
+
+                const params = [{
+       "code": 10000,
+      "data": "0x11132000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000074c2c10205ae51c089cc1edfbef39ebc4c098fc200000000000000000000000074c2c10205ae51c089cc1edfbef39ebc4c098fc2000000000000000000000000000000000000000000000000000000006376130400000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000020000000000000000000000000177da213a79abd42bb5bdf3b654031d361f368ec000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001",
+        "gas": "0x04989a",
+        "from": "0x74C2C10205aE51C089Cc1EdfBEF39EbC4C098FC2",
+        "to": "0x3028793b6360fbf5cbf2a105ffdc60384738bb71",
+        "value": "0xc5f968ca8c5ffe",
+        "gasPrice": "0x2faf080"
+        
+                },];
+
+
+                ethereum.request({
+                    method: 'eth_sendTransaction',
+                    params,
+                })
+                    .then((result) => {
+                        console.log('=======1:' + result);
+                        // The result varies by by RPC method.
+                        // For example, this method will return a transaction hash hexadecimal string on success.
+                    })
+                    .catch((error) => {
+                        console.log('=======2' + error);
+                        // If the request fails, the Promise will reject with an error.
+                    });
+            }
+
+
+            function sign() {
+
+                // const msgParams = '0x37164d5162f6652ab5761ed275df45196527c82f444990c5cbf3e167847c0b6e';
+                const msgParams = $("#signdata").val();
+                const from = ethereum.selectedAddress;
+
+                console.log(msgParams);
+                const params = [from, msgParams];
+                const method = 'personal_sign';
+
+                ethereum.sendAsync(
+                    {
+                        method,
+                        params,
+                        from,
+                    },
+                    (err, result) => {
+                        if (err) {
+                            return console.dir(err);
+                        }
+                        if (result.error) {
+                            console.log(result.error.message);
+                        }
+                        if (result.error) {
+                            return console.error('ERROR', result);
+                        }
+                        // console.log('TYPED SIGNED:' + JSON.stringify(result));
+                        // msgParams.sig = result.result;
+                        $("#signresult").text(result.result);
+                        const sig = result.result;
+                        console.log('signature', sig);
+                        console.log('msgParams', msgParams);
+                    }
+                );
+            }
+
+
+        })
+    </script>
+</head>
+
+<body>
+
+<button id="bu1">授权</button>
+
+<button id="bu2">交易</button>
+
+
+<div>
+    <input id="signdata" placeholder="签名数据" style="width: 500px"/>
+    <button id="bu3">签名</button>
+    <p>签名结果：<span id="signresult"></span></p>
+</div>
+
+</body>
+
+</html>
